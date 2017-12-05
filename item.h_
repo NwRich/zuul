@@ -1,0 +1,10 @@
+#ifndef ITEM_H
+#define ITEM_H
+using namespace std;
+class item {
+ public:
+  char* getDescription();
+ private:
+  char* description;
+};
+#endif

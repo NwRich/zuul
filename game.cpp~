@@ -1,0 +1,103 @@
+/*Nicholas Rich
+
+ */
+#include <iostream>
+#include<cstring>
+#include "room.h"
+#include "item.h"
+#include <vector>
+using namespace std;
+void goRoom(room* &currentRoom);
+void getHelp();
+void getInventory(vector<item*> &inventory);
+void pickupItem(vector<item*> &inventory, room* &currentRoom);
+void dropItem(vector<item*> &inventory, room* &currentRoom);
+int main() {
+  room* test1 = new room("testRoom1");
+  room* test2 = new room("testRoom2");
+  room* test3 = new room("testRoom3");
+  room* currentRoom = test1;
+
+  //item code example
+  item* award = new item("award");
+  test1->setExit("north", test2);
+  test1->setExit("west",test3);
+
+  test2->setExit("south",test1);
+  
+
+  vector<item*> inventory;
+  bool playing = true;
+  char* fInput = new char[80];
+  cout << "Welcome to this marvelous adventure" << endl;
+  cout << "the oal is to wakeup and get to school on time" << endl;
+  cout << "your commands are 'go', 'help', 'inventory', 'pickup', 'drop', and 'quit'" << endl;
+  currentRoom->getExitString();
+  while (playing == true) {
+    cin >> fInput;
+    cin.ignore();
+    if (strcmp(fInput, "go") == 0) {
+      goRoom(currentRoom);
+    }
+    if (strcmp(fInput, "quit") == 0) {
+      cout << "leaving already you big baby?" << endl;
+      return 0;
+    }
+    if (strcmp(fInput, "help") == 0) {
+      getHelp();
+    }
+    if (strcmp(fInput, "inventory") == 0) {
+      getInventory(inventory);
+    }
+    if(strcmp(fInput, "pickup") == 0) {
+      pickupItem(inventory,currentRoom);
+    }
+    if (strcmp(fInput, "drop") == 0) {
+      dropItem(inventory, currentRoom);
+    }
+  }
+  return 0;
+}
+void goRoom(room* &currentRoom) {
+  char* direction = new char[64];
+  cin >> direction;
+  cin.ignore();
+  room* nextRoom = currentRoom->getExit(direction);
+  if (nextRoom == NULL) {
+    cout << "There is no exit that way dummy!" << endl;
+  }
+  else {
+    currentRoom = nextRoom;
+    cout << currentRoom->getDescription() << endl;
+    currentRoom->getExitString();
+    currentRoom->getRoomItems();
+  }
+}
+void getHelp() {
+  cout << "You need help, you bum! Figure it out on your own!" << endl;
+}
+void getInventory(vector<item*> &inventory) {
+  for(vector<item*>::iterator it = inventory.begin(); it != inventory.end(); it++) {
+    cout << (*it)->getDescription() << endl;
+  }
+}
+void pickupItem(vector<item*> &inventory, room* &currentRoom) {
+  char* input = new char[80];
+  cin >> input;
+  cin.ignore();
+  inventory.push_back(currentRoom->removeItems(input));
+}
+
+void dropItem(vector<item*> &inventory, room* &currentRoom) {
+  char* input = new char[80];
+  cin >> input;
+  cin.ignore();
+  for(vector<item*>::iterator it = inventory.begin(); it != inventory.end(); it++) {
+    if (strcmp(input, (*it)->getDescription()) == 0) {
+      cout << (*it)->getDescription() << endl;
+      inventory.erase(it);
+      currentRoom->setItem(*it);
+      break;
+    }   
+  }
+}

@@ -1,0 +1,23 @@
+#ifndef ROOM_H
+#define ROOM_H
+#include <iostream>
+#include <map>
+#include <vector>
+#include "item.h"
+using namespace std;
+class room {
+ public:
+  char* getDescription();
+  room(char*);
+  void setExit(char*, room*);
+  void getExitString();
+  room* getExit(char*);
+  void setItem(item*);
+  char* getRoomItems();
+  void removeItems(item*);
+ private:
+  map<char*, room*> exits;
+  char* description;
+  vector<item*> items;
+};
+#endif

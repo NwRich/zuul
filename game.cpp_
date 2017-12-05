@@ -1,0 +1,67 @@
+/*Nicholas Rich
+
+ */
+#include <iostream>
+#include<cstring>
+#include "room.h"
+#include "item.h"
+using namespace std;
+bool goRoom(room* currentRoom);
+void getHelp();
+int main() {
+  room* test1 = new room("testRoom1");
+  room* test2 = new room("testRoom2");
+  room* test3 = new room("testRoom3");
+  room* currentRoom = test1;
+
+  //item code example
+  //item* bob = new item("bob ross");
+  //cout << bob->getDescription() << endl;
+
+  test1->setExit("north", test2);
+  test1->setExit("west",test3);
+  test2->setExit("south",test1); 
+  currentRoom->getExitString();
+  bool playing = true;
+  char* fInput = new char[80];
+  while (playing == true) {
+    cin >> fInput;
+    cin.ignore();
+    if (strcmp(fInput, "go") == 0) {
+      goRoom(currentRoom);
+    }
+    if (strcmp(fInput, "quit") == 0) {
+      return 0;
+    }
+    if (strcmp(fInput, "help") == 0) {
+      getHelp();
+    }
+    if (strcmp(fInput, "inventory") == 0) {
+
+    }
+    if(strcmp(fInput, "pickup") == 0) {
+      
+    }
+    if (strcmp(fInput, "drop") == 0) {
+
+    }
+  }
+  return 0;
+}
+bool goRoom(room* currentRoom) {
+  char* direction = new char[64];
+  cin >> direction;
+  cin.ignore();
+  room* nextRoom = currentRoom->getExit(direction);
+  if (nextRoom == NULL) {
+    cout << "There is no exit that way dummy!" << endl;
+  }
+  else {
+    currentRoom = nextRoom;
+    currentRoom->getExitString();
+    return false;
+  }
+}
+void getHelp() {
+  cout << "You need help, you bum! Figure it out on your own!" << endl;
+}
